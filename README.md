@@ -11,15 +11,16 @@ The binary expects two arguments, first the orginal command, followed by the ali
 This will work out of the box, simply running `rename "git status" gs` will edit your profile with a new alias.
 However, the go program can't make any changes to the terminal that is running on (if I'm wrong here and there is a way please let me know!). So the change won't take affect until you source the ~/.zshrc or ~/.bashrc file, or open a new terminal. 
 
-One way around it is to write a small bash function like 
+One way around it is to write a small bash function like (here using zsh)
 
 ``` 
 function rename() {
-    if [ "$#" -eq 2 ]; then
-        $GOPATH/bin/rename $1 $2
+    OUTPUT=`$GOPATH/bin/rename "$@"`
+    if [ "$?" -ne 0 ]; then
         source ~/.zshrc
+        echo "alias set"
     else
-        echo "rename takes in two arguments"
+        echo "$OUTPUT"
     fi
 }
 ```
